@@ -1,2 +1,2 @@
 # Commonly-Used-Algos
-# GCD
+1. GCD
