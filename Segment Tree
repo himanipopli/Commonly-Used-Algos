@@ -1,0 +1,84 @@
+Leetcode Ques - https://leetcode.com/problems/range-sum-query-mutable/
+
+class NumArray {
+    TreeNode root;
+    public NumArray(int[] nums) {
+        root=sum(nums,0,nums.length-1);
+    }
+    public TreeNode sum(int[] nums,int si,int ei){
+        TreeNode node;
+        if(si==ei){
+            node=new TreeNode(nums[si],si,ei);
+            return node;
+        }
+        if(si>ei){
+            return null;
+        }
+        int mid=(si+ei)/2;
+        int s=0;
+        TreeNode leftSum = sum(nums,si,mid);
+        TreeNode rightSum = sum(nums,mid+1,ei);
+        if(leftSum!=null){
+            s+=leftSum.val;
+        }
+        if(rightSum!=null){
+            s+=rightSum.val;
+        }
+        node=new TreeNode(s,si,ei);
+        node.left=leftSum;
+        node.right=rightSum;
+        return node; 
+    }
+    public void update(int index, int val) {
+        updateHelper(root,index,val);
+    }
+    public int updateHelper(TreeNode root,int index,int val){
+        int temp=0;
+        if(root.l==root.r&&root.l==index){
+            temp=val-root.val;
+            root.val=val;
+            return temp;
+        }
+        int mid=(root.l+root.r)/2;
+        if(index<=mid){
+            temp = updateHelper(root.left,index,val);
+        }else{
+            temp = updateHelper(root.right,index,val);
+        }
+        root.val+=temp;
+        return temp;
+    }
+    
+    public int sumRange(int left, int right) {
+        return sumRangeHelper(root,left,right);
+    }
+    public int sumRangeHelper(TreeNode root,int left,int right){
+        if(root.l==left&&root.r==right){
+            return root.val;
+        }
+        int mid=(root.l+root.r)/2;
+        if(right<=mid){
+            return sumRangeHelper(root.left,left,right);
+        }else if(left>mid){
+            return sumRangeHelper(root.right,left,right);
+        }else{
+            return sumRangeHelper(root.left,left,mid)+sumRangeHelper(root.right,mid+1,right);
+        }
+    }
+}
+class TreeNode{
+    int val,l,r;
+    TreeNode left,right;
+    TreeNode(int v,int l,int r){
+        val=v;
+        this.l=l;
+        this.r=r;
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(index,val);
+ * int param_2 = obj.sumRange(left,right);
+ */
