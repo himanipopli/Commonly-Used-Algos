@@ -6,3 +6,4 @@
 5. BufferedIO
 6. Ford-Fulkerson Algo (Max Flow)
 7. Edmonds-Karp Algo (Max Flow)
+8. Segment Tree (Update and Range Sum Queries)
